@@ -18,11 +18,10 @@ export const HomeScreen: React.FC<Props> = ({onPressStartPayment}) => {
         onChangeText={setAmount}
         autoComplete={'off'}
         autoFocus={true}
+        onSubmitEditing={payButtonDisabled ? undefined : () => onPressStartPayment(amount)}
+        blurOnSubmit={false}
       />
-      <TouchableOpacity
-        style={payButtonDisabled ? styles.buttonDisabled : styles.button}
-        onPress={() => onPressStartPayment(amount)}
-        disabled={payButtonDisabled}>
+      <TouchableOpacity style={payButtonDisabled ? styles.buttonDisabled : styles.button} onPress={() => onPressStartPayment(amount)} disabled={payButtonDisabled}>
         <Text style={styles.buttonText}>💳 Pay</Text>
       </TouchableOpacity>
     </View>
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 20,
+    textAlign: 'center',
   },
   button: {padding: 15, backgroundColor: 'green', borderRadius: 8},
   buttonDisabled: {

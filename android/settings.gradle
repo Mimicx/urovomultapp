@@ -3,4 +3,7 @@ plugins { id("com.facebook.react.settings") }
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 rootProject.name = 'olipaysdkexamplereactnativeapp'
 include ':app'
+include ':olipaysdk'
+include ':urovosdk'
 includeBuild('../node_modules/@react-native/gradle-plugin')
+

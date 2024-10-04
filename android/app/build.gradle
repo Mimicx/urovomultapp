@@ -116,4 +116,11 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // terminal sdk dependencies
+    api project(':olipaysdk')
+    api project(':urovosdk')
+    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.4'
+    implementation 'io.sentry:sentry:1.7.30'
+
 }
