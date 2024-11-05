@@ -11,6 +11,15 @@ export type QpayControllerType = {
     qpMostrarEstadoTexto: (event: QpMostrarEstadoTextoEvent) => any;
   }) => Promise<QpInicializadoEvent | QpErrorEvent>;
   setQpAmbiente: (ambiente: 'TEST' | 'PRODUCTION') => Promise<void>;
+  qpPrintTransaction: (params: {
+    identificador: String,
+    contrasena: String,
+    numeroTransaccion: String,
+    email:String,
+    monto:number,
+    codigoAprobacion: String,
+    referenciaBanco: String,
+  }) => Promise<void>;
   qpRealizaTransaccion: (params: {
     monto: number;
     propina: number;

@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.olipaysdkexamplereactnativeapp.olipaysdk .utils.ReactUtils;
+import com.olipaysdkexamplereactnativeapp.olipaysdk.utils.ReactUtils;
 
 import java.util.HashMap;
 
@@ -51,7 +51,6 @@ public class QpayControllerModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putString("eventName", "qpInicializado");
                     promise.resolve(map);
-
                 }
 
                 @Override
@@ -63,7 +62,6 @@ public class QpayControllerModule extends ReactContextBaseJavaModule {
                 public void qpError(String resultado, int codigo, boolean removeCardHint, String numeroTransaccion) {
                     resolveQpErrorEventPromise(resultado, codigo, removeCardHint, numeroTransaccion, promise);
                 }
-
             });
         } catch (QpayControllerAlreadyInitializedException e) {
             e.printStackTrace();
@@ -98,10 +96,39 @@ public class QpayControllerModule extends ReactContextBaseJavaModule {
                 public void qpError(String resultado, int codigo, boolean removeCardHint, String numeroTransaccion) {
                     resolveQpErrorEventPromise(resultado, codigo, removeCardHint, numeroTransaccion, promise);
                 }
-
             });
             getInstance().qpRealizaTransaccion(context.getCurrentActivity(), identificador, contrasena, monto, propina, referencia, diferimiento, plan, numeroPagos);
         } catch (TransactionOngoingException e) {
+            e.printStackTrace();
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void qpRealizaPrintVoucher(String identificador, String contrasena, String numeroTransaccion, String email, double monto, String codigoAprobacion, String referenciaBanco, Promise promise) {
+        try {
+            getInstance().setQpListener(new QpayControlEventosImpl() {
+                @Override
+                public void qpRegresaPrintVoucher(HashMap<String, String> resultado) {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("eventName", "qpRegresaPrintVoucher");
+                    map.putMap("resultado", ReactUtils.toWritableStringMap(resultado));
+                    promise.resolve(map);
+                }
+
+                @Override
+                public void qpMostrarEstadoTexto(String resultado, int codigo) {
+                    sendQpMostrarEstadoTextoEvent(resultado, codigo);
+                }
+
+                @Override
+                public void qpError(String resultado, int codigo, boolean removeCardHint, String numeroTransaccion) {
+                    resolveQpErrorEventPromise(resultado, codigo, removeCardHint, numeroTransaccion, promise);
+                }
+            });
+            
+              getInstance().qpRealizaPrintVoucher(identificador, contrasena, numeroTransaccion, monto, email, codigoAprobacion, referenciaBanco);
+        } catch (Exception e) {
             e.printStackTrace();
             promise.reject(e);
         }
@@ -115,12 +142,12 @@ public class QpayControllerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addListener(String eventName) {
-        // Keep: Required for RN built in Event Emitter Calls.
+        // Keep: Required for RN built-in Event Emitter Calls.
     }
 
     @ReactMethod
     public void removeListeners(Integer count) {
-        // Keep: Required for RN built in Event Emitter Calls.
+        // Keep: Required for RN built-in Event Emitter Calls.
     }
 
     private QpayController getInstance() {
@@ -152,7 +179,8 @@ public class QpayControllerModule extends ReactContextBaseJavaModule {
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap data) {
-        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, data);
+        getReactApplicationContext()
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit(eventName, data);
     }
-
 }

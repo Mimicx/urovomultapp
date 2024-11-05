@@ -1,0 +1,27 @@
+import * as z from 'zod';
+
+export const TipoConceptosSchema = z.object({
+  id: z.number(),
+  clave: z.string(),
+  descripcion: z.string(),
+  es_concepto_capturable: z.boolean(),
+  es_visible: z.boolean(),
+  es_concepto_repetible: z.boolean(),
+  maximo_de_concepto_repetido: z.number(),
+  es_importe_capturable: z.boolean(),
+  importe_de_moneda_fija_inicial: z.number(),
+  importe_de_moneda_minima: z.number(),
+  importe_de_moneda_maxima: z.number(),
+  fundamento_legal: z.number().nullable(),
+  descripcion_corta: z.nullable(z.any()),
+  monedas: z.number(),
+  capturable_de_fecha_inicial: z.boolean(),
+  capturable_de_fecha_final: z.boolean(),
+  capturable_de_nota_de_concepto: z.boolean(),
+  periodo_fiscal: z.number(),
+  clase_de_concepto_de_infraccion: z.number(),
+  tipo_de_cargo: z.number(),
+  grua: z.nullable(z.any()),
+  examen_medico: z.nullable(z.any()),
+  yarda: z.nullable(z.any()),
+});
